@@ -1,0 +1,122 @@
+### basic setting #### 
+getwd()
+setwd("/Users/ubase/Downloads") 
+
+library(readxl)
+cx<-read_excel("CX_09_07_2017.xlsx")
+
+CX<-read.csv("cx_12weeks_preprocessing2.csv", header=FALSE, stringsAsFactors=FALSE)
+
+
+## new data from raw data 
+
+cx3<-cx2[-c(25:26, 33:44)] #call_gh 등 필요없는 컬럼 제거 
+cxreview <-cx[c(1:3, 7:25, 29:32)]
+
+
+# csv extraction 
+write.csv(cx3, file="cx_12weeks_preprocessing.csv")   
+
+
+# changing column name
+colnames(cx2)<-c('customer_name', 'customer_id', 'survey_response_date', 
+	'ticket_id', 'agent_name', 'crewbie_zendisk_id', 'crewbie_user_id', 'crewbie_display_name', 
+	'crewbie_worktype', 'crewbie_language','OM','Lead','resolved_inquiry','effort_resolution',
+	'effort_getintouch', 'effort_getinfo', 'met_service_expect', 'supported', 'follow_through',
+	'likelihood_airbnb','NPS_segment', 'reason_ltrscore', 'reason_eng', 'cx_channel', 
+	'channel_full', 'call_as_gh', 'tier_ticket_type', 'issuetype', 'category', 'category2', 
+	'category3', 'categoryfull')
+
+
+# data extraction 
+
+survey_cn<-subset(cx3, crewbie_worktype=="CX - NonTrip - Crewbie - Mandarin")  #이렇게 하면 subset categorical variable 가능 
+cx_cancel<-subset(cx3, interaction_category=="Cancellations") #interaction category별로 추출
+
+
+
+
+#### Correlation analysis #### 
+
+# data extraction 
+survey<-CX[c(15:21)]
+cx_survey<-cx2(c(1, 4:6, 8:11, 14:21, 22, 25:27)) #마켓, 티어 포함해서 데이터 추출 
+
+cn_score<-survey_cn[c(9:15)]
+
+
+#subset 
+subset(cx3, crewbie_worktype=="CX - NonTrip - Crewbie - Mandarin")
+
+survey_t<-subset(survey_copy, crewbie_worktype2 == "T")
+survey_nt<-subset(survey_copy, crewbie_worktype2 == "NT")
+
+
+# numeric 처리 
+survey$effort_resolution<-as.numeric(survey$effort_resolution)
+survey$effort_getintouch <-as.numeric(survey$effort_getintouch)
+survey$effort_getinfo <-as.numeric(survey$effort_getinfo)
+survey$met_service_expect <-as.numeric(survey$met_service_expect)
+survey$supported<-as.numeric(survey$supported)
+survey$follow_through<-as.numeric(survey$follow_through)
+survey$likelihood_airbnb<-as.numeric(survey$likelihood_airbnb)
+
+
+as.character(x)
+as.complex(x)
+as.numeric(x) or as.double(x)
+as.integer(x)
+as.logical(x)
+## 출처: http://goodtogreate.tistory.com/entry/데이터구조 [GOOD to GREAT]
+ 
+
+# 결측치 처리 
+sum(is.na(survey))
+survey_copy<-na.omit(survey)
+
+# 등분산검정 
+bartlett.test(thick~cls,data=survey2)
+
+library(lawstat)
+levene.test(survey2$think, survey2$cls)
+
+
+
+# 상관분석
+cor(survey$effort_resolution, survey$likelihood_airbnb , method = "pearson"))
+cor(x, y, method = c("pearson", "kendall", "spearman"))
+
+cor(t_score) #데이터 전체 변수에 대한 상관관계 측정 
+
+
+# Correlation ggplot
+
+library(ggplot2);ggplot(survey_copy, aes(effort_resolution, likelihood_airbnb))+geom_point()+geom_smooth(method=lm) # 선형성 확인
+
+
+#표준화 for 요인분석 
+survey4<-transform(survey3,
+	effort_resolution_s<-scale(effort_resolution),
+	effort_getintouch_s<-scale(effort_getintouch),
+	effort_getinfo_s<-scale(effort_getinfo),
+	met_service_expect_s<-scale(met_service_expect),
+	supported<-scale(met_service_expect),
+	follow_through<-scale(met_service_expect)
+	likelihood_airbnb<-scale(likelihood_airbnb)
+
+
+# Correlation process 
+
+
+# National market 
+survey_jp<-subset(survey_copy, crewbie_language == "JP")
+jp_score<-survey_jp[c(10:16)]
+cor(jp_score)
+
+# Trip and nontrip 
+survey_t<-subset(survey_copy, crewbie_worktype2 == "T")
+survey_nt<-subset(survey_copy, crewbie_worktype2 == "NT")
+t_score<-survey_t[c(10:16)]
+nt_score<-survey_nt[c(10:16)]
+
+cor(t_score)
