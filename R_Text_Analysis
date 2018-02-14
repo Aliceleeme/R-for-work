@@ -1,0 +1,150 @@
+
+#### Text review analysis ####
+#github commit: http://datum.io/rrstudiogithub-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0/
+##from https://rpubs.com/pjmurphy/265713
+
+review2<-subset(review, Recommend=<7)  
+text<- review2[c(20)]
+
+#CSV 추출
+write.csv(text,"text.csv")        #csv extraction 
+write.table(text,"text.txt", sep="\t") #text extraction 
+
+#Install packages 
+install.packages("rvest")
+install.packages("tm")          #text analysis packages 
+install.packages("SnowballC")
+install.packages("stringr")
+
+#### loading the text #### 
+cname<- file.path("~", "directory", "medallia")
+cname 
+dir(cname)
+length(dir(cname)) ## help from: http://antilibrary.org/490
+
+library(tm)
+docs <- VCorpus(DirSource(cname))
+
+
+#Check the text type and information 
+docs
+class(docs)
+class(docs[[1]])
+summary(docs)
+inspect(docs)
+inspect(docs3[1])
+
+writeLines(as.character(docs[1]))
+writeLines(as.character(docs3))
+
+
+#### data cleansing ####
+
+#Removing punctuation (구두점)
+library(tm)
+docs <- tm_map(docs,removePunctuation)   # Removing punctuation (구두점)
+writeLines(as.character(docs[2])) # Check to see if it worked.
+    #The 'writeLines()' function is commented out to save space.
+
+##removePunctuation uses gsub('[[:punct:]]','',x) i.e. removes symbols: !"#$%&'()*+, \-./:;<=>?@[\\\]^_{|}~`. To remove other symbols, like typographic quotes or bullet signs (or any other), declare your own transformation function:
+##Or you can go further and remove everything that is not alphanumerical symbol or space:
+removeSpecialChars <- function(x) gsub("[^a-zA-Z0-9 ]","",x)
+docs <- tm_map(docs, removeSpecialChars)
+
+
+#This is an ascii character that did not translate, so it had to be removed.
+for (j in seq(docs)) {
+    docs[[j]] <- gsub(".", " ", docs[[j]])
+    docs[[j]] <- gsub(",", " ", docs[[j]])
+    docs[[j]] <- gsub("-", " ", docs[[j]]) } 
+
+docs <- tm_map(docs, removeNumbers)     #Removing numbers 
+#writeLines(as.character(docs[1]))      #Check it if the above codes are worked. 
+
+docs <- tm_map(docs, tolower)   #Converting to lowercase 
+DocsCopy <- docs #protection for the raw data 
+
+
+#For a list of the stopwords(common words) that usually have no analytic value. 
+#see: length(stopwords("english"))   
+
+#stopwords("english")   
+docs <- tm_map(docs, removeWords, stopwords("english"))   
+## I think there is another dictionaries not only "english". you should find that 
+
+docs <- tm_map(docs, PlainTextDocument)
+
+#writeLines(as.character(docs[1]))      #Check it if the above codes are worked.
+
+
+#### Data Cleaning ####
+
+#Eliminate the words 
+
+#docs2 - eliminating the words "customer service" or "airbnb"
+docs2 <- tm_map(docs2, removeWords, c("customer_service", "customer service"))
+
+#Removing particular word  
+#Just remove the words "syllogism" and "tautology". 
+#These words don't actually exist in these texts. But this is how you would remove them if they had.
+
+#gsub = from long word to short word 
+
+for (j in seq(docs))
+{
+  docs[[j]] <- gsub("your company", "your_company", docs[[j]])
+  docs[[j]] <- gsub("customer service", "customer_service", docs[[j]])
+  docs[[j]] <- gsub("not answered", "not_answered", docs[[j]])
+  docs[[j]] <- gsub("not solved", "not_solved", docs[[j]])
+  docs[[j]] <- gsub("landlord", "host", docs[[j]])
+  docs[[j]] <- gsub("qpp", "app", docs[[j]]) 
+
+
+##### Final step for text preprocessing ####
+
+#Combining word that should stay together
+docs2 <- tm_map(docs2, PlainTextDocument)
+
+#Removing common word endings (e.g., “ing”, “es”, “s”)
+docs_st<-tm_map(docs,stemDocument) #sometimes it does not work - not recommend 
+
+docs_st <- tm_map(docs, stemming = TRUE, language="english")   
+docs_st <- tm_map(docs_st, PlainTextDocument)
+
+
+##Stripping unnecesary whitespace from your documents:
+docs2 <- tm_map(docs2, stripWhitespace)
+#writeLines(as.character(docs[1])) # Check to see if it worked.
+
+##To Finish
+#Be sure to use the following script once you have completed preprocessing.
+docs2 <- tm_map(docs2, PlainTextDocument)
+
+dtm2 <- DocumentTermMatrix(docs2)         #Create a document term matrix.
+dtm   
+inspect(dtm2)             #You can check these: Non-/sparse entries, Sparsity, Maximal term length, Weighting 
+
+
+tdm2 <- TermDocumentMatrix(docs2)        #You’ll also need a transpose of this matrix. Create it using:  
+tdm
+
+freq2 <- colSums(as.matrix(dtm2))   #Organize terms by their frequency:
+length(freq2)   
+ord <- order(freq2)   
+
+findFreqTerms(dtm2, lowfreq=50)            #the word list over than freq>50
+findFreqTerms(dtm2, lowfreq=100)           #the word list over than freq>100
+
+
+#Start by removing sparse terms:   
+#The ‘removeSparseTerms()’ function will remove the infrequently used words, 
+#leaving only the most well-used words in the corpus.
+#This makes a matrix that is 20% empty space, maximum.   
+
+dtms2 <- removeSparseTerms(dtm2, 0.2) 
+dtms2
+
+#Text data extraction 
+wf <- data.frame(word=names(freq2), freq2=freq2)   
+write.csv(wf, "wf4.csv")
+write.table(x,"filename.txt",sep="\t",row.names=FALSE)
