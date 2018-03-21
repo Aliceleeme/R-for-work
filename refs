@@ -1,0 +1,40 @@
+
+Python
+[predict](http://www.statsmodels.org/dev/examples/notebooks/generated/predict.html)
+
+
+R
+* predict()의 결과는 newdata 에 들어간 데이터 프레임 객체의 row 개수 만큼 출력
+* lr.model 결과 분석 
+	* [Logistic Regression With R](http://r-statistics.co/Logistic-Regression-With-R.html)
+	* 
+* 학습모델에서 프레딕션 결과를 전체적으로 csv로 뽑기
+	* 
+* 컨퓨전메트릭스 x must be atomic for sort.list 
+
+* reproducible regression 
+	* [linear regression - How do you predict outcomes from a new dataset using a model created from a different dataset in R? - Stack Overflow](https://stackoverflow.com/questions/23141479/how-do-you-predict-outcomes-from-a-new-dataset-using-a-model-created-from-a-diff?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa)
+
+* [GitHub - limcheekin/r-flight-delay-prediction: Predict Flight Delay using R](https://github.com/limcheekin/r-flight-delay-prediction)
+
+[R 예제 코드 Logistic Regression / 로지스틱 회귀분석 :: 꼬낄콘의 분석일지](http://kkokkilkon.tistory.com/28)
+
+[파이쿵 :: 18. Training-Testing 데이타 셋 (lec 07-2)](http://pythonkim.tistory.com/24)
+
+[Machine Learning에서 validation set을 사용하는 이유](http://3months.tistory.com/118)
+
+R에서 caret package 를 이용한 데이터 학습 간편화 전략
+ [lovetoken](https://lovetoken.github.io/r/2017/04/23/caret_package.html)
+
+[로지스틱 회귀분석 in R (Logistic regression in R) - DODOMIRA](http://www.dodomira.com/2016/02/12/logistic-regression-in-r/)
+
+	* 회귀분석 = 지도학습
+	* 범주형 데이터 (categorical) 분석에 사용. 
+	* 수치형 데이터는 linear regression 
+
+
+http://www.dodomira.com/2016/01/12/%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B6%84%EC%84%9D%EC%9D%98-%EC%9C%A0%ED%98%95/
+
+http://www.itworld.co.kr/print/101997
+
+[lovetoken](https://lovetoken.github.io/r/2017/04/23/caret_package.html)
