@@ -40,6 +40,13 @@ extractNoun(data[1])
 extractNoun(data[2])
 extractNoun(data[3])
 
+####오타 교정하기(특정 한국어 단어, 문장 바꾸기) 
+for (j in seq(docs))
+{
+  docs[[j]] <- gsub("니당", "니다", docs[[j]])     # pattern, replacement, dataname 순서로 작성 
+  docs[[j]] <- gsub("조아용", "좋아요", docs[[j]]     # 상황에 따라 gsub 통해서 오타 교정(그러나 비추천)
+  docs[[j]] <- gsub("구용", "구요", docs[[j]]}   
+
 #read.lines; text file should be saved with utf-8 encoding 
 data <- readLines("Androidreview_20180529.txt", encoding="UTF-8")
 
@@ -55,6 +62,8 @@ extractNoun(data[3])
 
 #data_corpus <- sapply(data, function(x) {paste(extractNoun(x), collapse=" ")}, USE.NAMES=F)
 
+####Text mining 
+#Vcorpus로 고민해보는 것도 좋지 않을까 
 #library(tm)
 data_corpus <- Corpus(VectorSource(data_corpus))
 data_corpus <- Corpus(VectorSource(data))
@@ -84,10 +93,11 @@ data_tdm <- TermDocumentMatrix(data_corpus_test, control=list(wordLengths=c(2,In
 doc <- Corpus(VectorSource(data_corpus_test))
 tdm <- TermDocumentMatrix(doc)
 #Encoding(data_tdm$dimnames$Terms) = 'UTF-8'
-tdm2 <- as.matrix(tdm)
-tdm3 <- rowSums(tdm2)
-tdm4 <- tdm3[order(tdm3, decreasing = T)]
-tdm4
+tdm <- as.matrix(tdm)
+tdm <- rowSums(tdm)
+tdm <- tdm3[order(tdm, decreasing = T)]
+#str(tdm)
+tdm
 
 
 ########### 
