@@ -1,12 +1,3 @@
-
-#### 과제 20180529 #### 
-1. 애플스토어 리뷰 크롤링 
-# https://stackoverflow.com/questions/4731620/crawl-data-on-the-app-store
-# https://hjlog.me/post/45
-
-#installing text analytics packages 
-#참고: https://statkclee.github.io/text/nlp-book.html
-
 install.packages("tm")          # text analysis package
 install.packages("SnowballC")
 install.packages("stringr")
